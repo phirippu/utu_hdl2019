@@ -37,22 +37,26 @@ end debounce_tb;
 
 architecture Behavioral of debounce_tb is
 
-component debounce is 
-PORT ( 
-   SCLK : in STD_LOGIC;
-   INPUT : in STD_LOGIC;
-   OUTPUT : out STD_LOGIC
-   );
-end component;
+constant clk_cycles:integer:=255;
+
+--component debounce is 
+--PORT ( 
+--   SCLK : in STD_LOGIC;
+--   INPUT : in STD_LOGIC;
+--   OUTPUT : out STD_LOGIC
+--   );
+--end component;
 
     signal tb_in    : STD_LOGIC:='0';
-    signal tb_clk      : STD_LOGIC:= '0';
+    signal tb_clk   : STD_LOGIC:='0';
     signal tb_out   : STD_LOGIC;
     constant period   : time := 5 ns;
 
     begin
     
-    DUT: debounce port map (SCLK=>tb_clk, INPUT=>tb_in, OUTPUT=>tb_out);
+    DUT: entity work.debounce
+    generic map (clk_cycles=>clk_cycles)
+    port map (SCLK=>tb_clk, INPUT=>tb_in, OUTPUT=>tb_out);
     
     generate_clock : process(tb_clk)
         begin

@@ -32,21 +32,22 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity debounce is
+    generic(clk_cycles:integer:=127);
     Port ( SCLK : in STD_LOGIC;
            INPUT : in STD_LOGIC;
            OUTPUT : out STD_LOGIC);
-end debounce;
+end entity debounce;
 
 architecture Behavioral of debounce is
 begin
     process(SCLK)
-    variable tout: integer range 0 to 127 := 0;
+    variable tout: integer range 0 to clk_cycles := 0;
     variable lock: std_logic;
     begin
         if (rising_edge(SCLK)) then
             if (INPUT='1') then
                 if lock='0' then tout := tout + 1; end if;
-                if tout=127 then
+                if tout=clk_cycles then
                     lock := '1';
                     OUTPUT<='1';
                     tout:=0;
