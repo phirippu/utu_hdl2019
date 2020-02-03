@@ -1,0 +1,15 @@
+{
+   "ActiveEmotionalView":"Default View",
+   "Default View_ScaleFactor":"1.0",
+   "Default View_TopLeft":"-522,-643",
+   "ExpandedHierarchyInLayout":"",
+   "guistr":"# # String gsaved with Nlview 7.0.21  2019-05-29 bk=1.5064 VDI=41 GEI=36 GUI=JA:9.0 TLS
+#  -string -flagsOSRD
+preplace inst pwm_0 -pg 1 -lvl 2 -x 380 -y -270 -defaultsOSRD
+preplace inst debounce_0 -pg 1 -lvl 1 -x -230 -y -350 -defaultsOSRD
+preplace inst c_counter_binary_0 -pg 1 -lvl 1 -x -230 -y -530 -defaultsOSRD
+levelinfo -pg 1 -350 -230 380 500
+pagesize -pg 1 -db -bbox -sgen -350 -630 500 140
+"
+}
+

@@ -1,0 +1,30 @@
+{
+  "design": {
+    "design_info": {
+      "boundary_crc": "0x0",
+      "device": "xc7z020clg400-1",
+      "name": "block_led",
+      "synth_flow_mode": "Hierarchical",
+      "tool_version": "2019.2.1"
+    },
+    "design_tree": {
+      "pwm_0": "",
+      "debounce_0": "",
+      "c_counter_binary_0": ""
+    },
+    "components": {
+      "pwm_0": {
+        "vlnv": "pholey:user:pwm:1.0",
+        "xci_name": "block_led_pwm_0_0"
+      },
+      "debounce_0": {
+        "vlnv": "pholey:user:debounce:1.0",
+        "xci_name": "block_led_debounce_0_0"
+      },
+      "c_counter_binary_0": {
+        "vlnv": "xilinx.com:ip:c_counter_binary:12.0",
+        "xci_name": "block_led_c_counter_binary_0_0"
+      }
+    }
+  }
+}

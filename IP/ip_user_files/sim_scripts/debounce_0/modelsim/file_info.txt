@@ -1,0 +1,2 @@
+debounce.vhd,vhdl,xil_defaultlib,../../../../debounce_0/src/debounce.vhd,
+debounce_0.vhd,vhdl,xil_defaultlib,../../../../debounce_0/sim/debounce_0.vhd,
