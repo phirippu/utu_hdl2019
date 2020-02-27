@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 02/09/2020 09:19:26 PM
+-- Create Date: 02/27/2020 05:45:56 PM
 -- Design Name: 
--- Module Name: clk_div - Behavioral
+-- Module Name: timerate_FSM - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -31,29 +31,15 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity clk_div is
-    generic( scale:integer:=2047 );
-    Port ( clock : in STD_LOGIC;
+entity timerate_FSM is
+    Port ( btn_in : in STD_LOGIC;
            reset : in STD_LOGIC;
-           clkout : out STD_LOGIC);
-end clk_div;
+           rate : out STD_LOGIC_VECTOR (4 downto 0));
+end timerate_FSM;
 
-architecture Behavioral of clk_div is
+architecture Behavioral of timerate_FSM is
+
 begin
-    process(clock, reset)
-        variable cnt:integer range 0 to scale;       -- Divide input frequency by 2*scale. Scale must be non-zero, positive.
-        variable state: std_logic;
-        begin
-        if reset='1' then
-            state := '0';
-            cnt := 0;
-        elsif rising_edge(clock) then
-            cnt:=cnt+1;
-            if cnt=scale then 
-                state:=state xor '1';
-                cnt:=0;
-            end if;
-        end if;
-    clkout<=state;
-    end process;
+
+
 end Behavioral;

@@ -36,8 +36,8 @@ use work.all;
 entity top_lab5 is
     Port ( 
             sw : in STD_LOGIC_VECTOR (3 downto 0);
---           btn : in STD_LOGIC_VECTOR (3 downto 0);
---           led5 : out STD_LOGIC_VECTOR (2 downto 0);
+            btn : in STD_LOGIC_VECTOR (3 downto 0);
+            led5 : out STD_LOGIC_VECTOR (2 downto 0);
 --           led6 : out STD_LOGIC_VECTOR (2 downto 0);
            jc   : out STD_LOGIC_VECTOR (7 downto 0);
            sysclk:  in STD_LOGIC;
@@ -47,25 +47,61 @@ end top_lab5;
 architecture Behavioral of top_lab5 is
     signal lowclock: std_logic;
     signal slowclock: std_logic;
-    signal pwm0duty: std_logic_vector (7 downto 0);
+    signal master_reset: std_logic;
+    signal pwm_R_duty: std_logic_vector (7 downto 0);
+    signal pwm_G_duty: std_logic_vector (7 downto 0);
+    signal pwm_B_duty: std_logic_vector (7 downto 0);
+
+    signal reset_button: std_logic;
+    signal rate_button: std_logic;
+    signal direction_button: std_logic;
+    signal alarm_button: std_logic;
+    signal smooth_button: std_logic;
+    
+    signal time_pace: std_logic_vector (3 downto 0);
 
     component clk_div 
         generic (scale:integer);
-        port ( clk : in STD_LOGIC;
-                   clkout : out STD_LOGIC);
+        Port (   clock : in STD_LOGIC;
+                 reset : in STD_LOGIC;
+                 clkout : out STD_LOGIC);
+    end component;
+
+    component clk_div_4bit 
+        Port ( clock : in STD_LOGIC;
+               reset : in STD_LOGIC;
+               divisr : in STD_LOGIC_VECTOR (3 downto 0);
+               output : out STD_LOGIC);
     end component;
     
     component pwm8
         Port ( pwm : in STD_LOGIC_VECTOR (7 downto 0);
-               clock : in STD_LOGIC;
-               pwmout : out STD_LOGIC);
+              clock : in STD_LOGIC;
+              reset : in STD_LOGIC;
+              pwmout : out STD_LOGIC);
+    end component;
+    
+    component debounce
+        generic(clk_cycles:integer);
+        Port ( clock : in STD_LOGIC;
+               input : in STD_LOGIC;
+               reset : in STD_LOGIC;
+               output : out STD_LOGIC);
     end component;
     
 begin
 
-DIV0: clk_div generic map (scale=>1023) port map (clk => sysclk, clkout=>lowclock);
-DIV1: clk_div generic map (scale=>255) port map (clk => lowclock, clkout=>slowclock);
-PWM0: pwm8 port map (clock => sysclk, pwm => pwm0duty, pwmout => led(3));
+DIV_DEBOUNCE: clk_div generic map (scale=>1023) port map (clock => sysclk, clkout=>lowclock, reset=>master_reset);
+DIV_PWM:      clk_div generic map (scale=>255) port map (clock => lowclock, clkout=>slowclock, reset=>master_reset);
+DIV_ALARM:    clk_div generic map (scale=>255) port map (clock => lowclock, clkout=>slowclock, reset=>master_reset);
+
+DIV_ALARM_FSM:clk_div_4bit port map (divisr=> time_pace, clock => lowclock, output=>slowclock, reset=>master_reset);
+DIV_COLOR_FSM:clk_div_4bit port map (divisr=> time_pace, clock => lowclock, output=>slowclock, reset=>master_reset);
+
+
+PWMR: pwm8 port map (clock => sysclk, pwm => pwm_R_duty, pwmout => led5(0), reset=>master_reset);
+PWMG: pwm8 port map (clock => sysclk, pwm => pwm_G_duty, pwmout => led5(1), reset=>master_reset);
+PWMB: pwm8 port map (clock => sysclk, pwm => pwm_B_duty, pwmout => led5(2), reset=>master_reset);
 
 jc <= "00000000";
 
