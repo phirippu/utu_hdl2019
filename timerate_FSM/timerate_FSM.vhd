@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 02/27/2020 07:32:56 PM
+-- Create Date: 02/27/2020 05:45:56 PM
 -- Design Name: 
--- Module Name: clk_div_4bit - Behavioral
+-- Module Name: timerate_FSM - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -33,29 +33,38 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity clk_div_4bit is
-    Port ( clock : in STD_LOGIC;
+entity timerate_FSM is
+    Port ( btn_in : in STD_LOGIC;
            reset : in STD_LOGIC;
-           divisr : in STD_LOGIC_VECTOR (3 downto 0);
-           output : out STD_LOGIC);
-end clk_div_4bit;
+           rate : out STD_LOGIC_VECTOR (3 downto 0));
+end timerate_FSM;
 
-architecture Behavioral of clk_div_4bit is
+architecture Behavioral of timerate_FSM is
 
 begin
-    process(clock, reset)
-        variable cnt:integer range 0 to 15;
-        variable state: std_logic;
-        begin
-        if reset='1' then
-            state := '0';
-        elsif rising_edge(clock) then
-            cnt:=cnt+1;
-            if cnt>=divisr then 
-                state:=not state;
-                cnt:=0;
-            end if;
-        end if;
-    output<=state;
+main_state_machine: process
+    variable state: integer range 0 to 15;
+    begin
+    if reset='1' then
+        state     := 1;
+   
+    elsif rising_edge(btn_in) then      
+        case state is
+            WHEN 1 =>
+            state := 3;
+                
+            WHEN 3 =>
+            state := 5;
+
+            WHEN 5 =>
+            state := 1;
+
+            WHEN others =>
+            state := 1;
+    end case;
+    end if;
+    rate <= std_logic_vector(to_unsigned(state,4));
+    wait on btn_in, reset;
     end process;
+    
 end Behavioral;

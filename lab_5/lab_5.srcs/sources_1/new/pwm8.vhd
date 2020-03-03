@@ -39,7 +39,7 @@ begin
     begin
         if reset='1' then
             state := '0';
-            pwm_cnt := 0;
+            pwm_cnt := "00000000";
         elsif rising_edge(clock) then
            -- pwm_duty:= pwduty;
             if pwm_cnt=pwm+1 then

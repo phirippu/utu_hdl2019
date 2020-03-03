@@ -45,23 +45,23 @@ end main_FSM;
 
 architecture Behavioral of main_FSM is
    
-    signal Color_Drive      : Color_Type; 
-  
+ 
     begin
 main_state_machine: process
     variable tickcounter: integer range 0 to 7;
     variable Color_State  : Color_State_Type; 
+    variable Color_Drive      : Color_Type; 
 
     begin
     if reset='1' then
         Color_State     := Standby;
-        Color_Drive     <= White;
+        Color_Drive     := White;
         tickcounter     := 0;
     
     elsif clock'event and clock='1' then      -- on timer clock edge do color change.
         case Color_State is
             WHEN Red =>
-                Color_Drive<=Red;
+                Color_Drive:=Red;
                 if direction='1' then
                     Color_State:= Yellow;
                 else
@@ -69,7 +69,7 @@ main_state_machine: process
                 end if;
                 
             WHEN Green =>
-                Color_Drive<=Green;   
+                Color_Drive:=Green;   
                 if direction='1' then
                 Color_State:= Blue;
             else
@@ -77,7 +77,7 @@ main_state_machine: process
             end if;
             
             WHEN Blue => 
-                Color_Drive<=Blue;
+                Color_Drive:=Blue;
                 if direction='1' then
                 Color_State:= Purple;
             else
@@ -85,7 +85,7 @@ main_state_machine: process
             end if;
             
             WHEN Standby =>
-                Color_Drive<=White;
+                Color_Drive:=White;
                 tickcounter:=tickcounter+1;
                 if tickcounter = 4 then
                     tickcounter:= 0;
@@ -97,7 +97,7 @@ main_state_machine: process
                 end if;
             
             WHEN Yellow => 
-                Color_Drive<=Yellow;
+                Color_Drive:=Yellow;
                 if direction='1' then
                 Color_State:= Green;
             else
@@ -105,7 +105,7 @@ main_state_machine: process
             end if;
             
             WHEN Purple => 
-                Color_Drive<=Purple;
+                Color_Drive:=Purple;
                 if direction='1' then
                 Color_State:= Red;
             else
@@ -113,12 +113,13 @@ main_state_machine: process
             end if;
             
             WHEN others =>      -- just in case
-                Color_Drive <= White; 
+                Color_Drive := White; 
                 Color_State := Standby;
                 tickcounter:= 2;
 
         end case;
     end if;
+    color <= Color_Drive; 
     wait on clock, reset;
     end process;
 end Behavioral;
