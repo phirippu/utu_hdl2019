@@ -32,6 +32,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity alarm_timeout is
+    generic( scale:integer:=10 );
     Port ( clock : in STD_LOGIC;
            alarm : in STD_LOGIC;
            output : out STD_LOGIC;
@@ -41,6 +42,26 @@ end alarm_timeout;
 architecture Behavioral of alarm_timeout is
 
 begin
+
+process(reset, clock, alarm)
+variable cnt:integer range 0 to scale;
+variable state: std_logic;
+begin
+    if reset='1' then
+        state := '0';
+        cnt:= 0;
+    elsif alarm='1' then
+        cnt:=scale;
+    elsif rising_edge(clock) then
+        if (cnt>0) then
+            cnt:=cnt-1;
+            state:='1';
+        else
+            state:='0';
+        end if;
+    end if;
+output <= state;    
+end process;
 
 
 end Behavioral;

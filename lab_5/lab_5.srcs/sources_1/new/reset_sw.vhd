@@ -42,10 +42,12 @@ architecture Behavioral of reset_sw is
 begin
     process(clock)
     begin
-    if (rising_edge(clock) and btn_in = '1') then
-        reset_out <= '1';       -- If the reset button is pressed, hold the reset line for one input clock.
-    else
-        reset_out <= '0';       
+    if rising_edge(clock) then
+        if btn_in = '1' then
+            reset_out <= '1';       -- If the reset button is pressed, hold the reset line for one input clock.
+        else
+            reset_out <= '0';
+        end if;       
     end if;
     end process;
 end Behavioral;

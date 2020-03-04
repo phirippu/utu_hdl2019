@@ -41,7 +41,7 @@ end alarm_FSM;
 architecture Behavioral of alarm_FSM is
 
 begin
-alarm_state_machine: process
+alarm_state_machine: process(clock, reset)
     variable Color_State  : Color_State_Type; 
     variable Color_Drive  : Color_Type;
     
@@ -65,7 +65,6 @@ alarm_state_machine: process
                 Color_State:=Off;
         end case;
     end if;
-    wait on clock, reset;
     color <= Color_Drive;
     end process;
 
